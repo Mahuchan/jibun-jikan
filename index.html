@@ -29,75 +29,91 @@
 .field input[type="color"]::-webkit-color-swatch-wrapper{padding:2px}
 .field input[type="color"]::-webkit-color-swatch{border:1px solid #0002;border-radius:5px}.modalactions{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.modalactions .right{display:flex;gap:8px}
 @media(max-width:600px){.app{padding:16px 10px 30px}.brand h1{font-size:23px}.summary{gap:7px}.stat{padding:11px}.stat strong{font-size:18px}.stat span{font-size:10px}.toolbar{padding:10px}.panelhead{padding:15px}.actions .btn{padding:9px 10px}.timeline{padding-left:8px;padding-right:8px}}
+
+/* クラウド同期・ログイン */
+#cloudLoginBack{position:fixed;inset:0;background:#17243bbd;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+#cloudLoginBack[hidden]{display:none}
+#cloudLoginCard{width:min(480px,100%);max-height:95vh;overflow:auto;background:#fff;border-radius:18px;padding:22px;box-shadow:0 20px 60px #13224440}
+#cloudLoginCard h2{font-size:20px;margin:0 0 8px}
+#cloudLoginCard p{font-size:13px;line-height:1.7;color:#667085}
+#cloudLoginCard .cloudfield{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+#cloudLoginCard label{font-size:12px;font-weight:700;color:#4b5568}
+#cloudLoginCard input{width:100%;min-width:0;border:1px solid #dfe4ed;border-radius:9px;padding:11px;font:inherit;font-size:13px}
+#cloudLoginCard .cloudactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+#cloudLoginCard .cloudactions button{flex:1}
+#cloudMessage{white-space:pre-wrap;color:#9b3d35;font-size:12px;line-height:1.6;margin-top:10px}
+#cloudStatus{font-size:11px;color:#667085;margin:10px 2px 0}
+#cloudLogoutBtn{display:none}
+
 </style>
 </head>
 <body>
 <div class="app">
-  <header class="top">
-    <div class="brand"><small>MY TIME, MY PACE</small><h1>じぶん時間 <span style="font-size:13px;color:#8993a6;font-weight:500">prototype</span></h1></div>
-    <div class="actions"><button class="btn primary" id="addTaskBtn">＋ タスク</button><button class="btn primary" id="addPlanBtn">＋ 予定</button><button class="btn primary" id="addActualBtn">＋ 実績</button><button class="btn" id="colorSettingsBtn">設定</button></div>
-  </header>
-  <div class="toolbar">
-    <div class="date-nav"><button class="iconbtn" id="prev">‹</button><strong id="dateLabel"></strong><button class="iconbtn" id="next">›</button><button class="btn" id="today">今日</button></div>
-    <div class="switch"><button class="active" data-view="day">1日</button><button data-view="week">1週間</button></div>
-  </div>
-  <div class="summary">
-    <div class="stat"><span>今日の予定</span><strong id="plannedStat">0件</strong></div>
-    <div class="stat"><span>今日の実績</span><strong id="actualStat">0分</strong></div>
-    <div class="stat"><span>タスク完了</span><strong id="taskStat">0 / 0</strong></div>
-  </div>
-  <section class="panel">
-    <div class="panelhead"><div><h2 id="timelineTitle">今日の時間割</h2><p>左右のカードは、開始時刻と所要時間に合わせて配置されます。</p></div></div>
-    <div id="dayView" class="timeline"></div>
-    <div id="weekView" class="weeklist" style="display:none"></div>
-  </section>
-  <section class="taskpanel"><div class="taskhead"><h2>タスク一覧</h2><button class="btn" id="addTaskBtn2">＋ 追加</button></div><div id="tasks" class="tasks"></div><p class="hint">試作品のデータは、このブラウザ内に保存されます。MacとiPhoneの同期は、次の段階でクラウド保存を追加します。</p></section>
+<header class="top">
+<div class="brand"><small>MY TIME, MY PACE</small><h1>じぶん時間 <span style="font-size:13px;color:#8993a6;font-weight:500">prototype</span></h1></div>
+<div class="actions"><button class="btn primary" id="addTaskBtn">＋ タスク</button><button class="btn primary" id="addPlanBtn">＋ 予定</button><button class="btn primary" id="addActualBtn">＋ 実績</button><button class="btn" id="colorSettingsBtn">設定</button></div>
+</header>
+<div class="toolbar">
+<div class="date-nav"><button class="iconbtn" id="prev">‹</button><strong id="dateLabel"></strong><button class="iconbtn" id="next">›</button><button class="btn" id="today">今日</button></div>
+<div class="switch"><button class="active" data-view="day">1日</button><button data-view="week">1週間</button></div>
+</div>
+<div class="summary">
+<div class="stat"><span>今日の予定</span><strong id="plannedStat">0件</strong></div>
+<div class="stat"><span>今日の実績</span><strong id="actualStat">0分</strong></div>
+<div class="stat"><span>タスク完了</span><strong id="taskStat">0 / 0</strong></div>
+</div>
+<section class="panel">
+<div class="panelhead"><div><h2 id="timelineTitle">今日の時間割</h2><p>左右のカードは、開始時刻と所要時間に合わせて配置されます。</p></div></div>
+<div id="dayView" class="timeline"></div>
+<div id="weekView" class="weeklist" style="display:none"></div>
+</section>
+<section class="taskpanel"><div class="taskhead"><h2>タスク一覧</h2><button class="btn" id="addTaskBtn2">＋ 追加</button></div><div id="tasks" class="tasks"></div><p class="hint">データはこのブラウザに保存され、ログインするとクラウドにも同期されます。別の端末でも同じアカウントでログインしてね。</p></section>
 </div>
 <div class="modalback" id="scheduleChoiceBack"><div class="modal"><h2>予定を登録</h2><p style="color:#778197;font-size:13px;margin:-5px 0 16px">登録方法を選んでね。</p><div style="display:grid;gap:10px"><button type="button" class="btn" id="singleScheduleChoice" style="text-align:left;padding:14px">１回だけ登録 <small style="display:block;color:#778197;font-weight:400;margin-top:4px">特定の日の予定を登録</small></button><button type="button" class="btn" id="repeatScheduleChoice" style="text-align:left;padding:14px">繰り返し一括登録 <small style="display:block;color:#778197;font-weight:400;margin-top:4px">曜日と期間を指定してまとめて登録</small></button></div><div class="modalactions"><span></span><div class="right"><button type="button" class="btn" id="scheduleChoiceCancel">キャンセル</button></div></div></div></div>
 <div class="modalback" id="repeatBack"><div class="modal"><h2>繰り返し予定を一括登録</h2>
 <form id="repeatForm">
-  <div class="formgrid">
-    <div class="field full"><label for="repeatTitle">予定名</label><input id="repeatTitle" required maxlength="80" placeholder="例：通勤、仕事、睡眠"></div>
-    <div class="field"><label for="repeatStart">開始時刻</label><input id="repeatStart" type="time" value="08:00" required></div>
-    <div class="field"><label for="repeatEnd">終了時刻</label><input id="repeatEnd" type="time" value="09:00" required></div>
-    <div class="field"><label for="repeatColor">時間割の色</label><input id="repeatColor" type="color" value="#dfeaff"></div>
-    <div class="field full"><label>繰り返す曜日</label>
-      <div id="weekdayChoices" style="display:flex;gap:7px;flex-wrap:wrap">
-        <label class="weekday-choice"><input type="checkbox" value="1" checked>月</label>
-        <label class="weekday-choice"><input type="checkbox" value="2" checked>火</label>
-        <label class="weekday-choice"><input type="checkbox" value="3" checked>水</label>
-        <label class="weekday-choice"><input type="checkbox" value="4" checked>木</label>
-        <label class="weekday-choice"><input type="checkbox" value="5" checked>金</label>
-        <label class="weekday-choice"><input type="checkbox" value="6">土</label>
-        <label class="weekday-choice"><input type="checkbox" value="0">日</label>
-      </div>
-    </div>
-    <div class="field"><label for="repeatFrom">登録開始日</label><input id="repeatFrom" type="date" required></div>
-    <div class="field"><label for="repeatTo">登録終了日</label><input id="repeatTo" type="date" required></div>
-  </div>
-  <div class="modalactions"><span></span><div class="right"><button type="button" class="btn" id="repeatCancel">キャンセル</button><button type="submit" class="btn primary">一括登録</button></div></div>
+<div class="formgrid">
+<div class="field full"><label for="repeatTitle">予定名</label><input id="repeatTitle" required maxlength="80" placeholder="例：通勤、仕事、睡眠"></div>
+<div class="field"><label for="repeatStart">開始時刻</label><input id="repeatStart" type="time" value="08:00" required></div>
+<div class="field"><label for="repeatEnd">終了時刻</label><input id="repeatEnd" type="time" value="09:00" required></div>
+<div class="field"><label for="repeatColor">時間割の色</label><input id="repeatColor" type="color" value="#dfeaff"></div>
+<div class="field full"><label>繰り返す曜日</label>
+<div id="weekdayChoices" style="display:flex;gap:7px;flex-wrap:wrap">
+<label class="weekday-choice"><input type="checkbox" value="1" checked>月</label>
+<label class="weekday-choice"><input type="checkbox" value="2" checked>火</label>
+<label class="weekday-choice"><input type="checkbox" value="3" checked>水</label>
+<label class="weekday-choice"><input type="checkbox" value="4" checked>木</label>
+<label class="weekday-choice"><input type="checkbox" value="5" checked>金</label>
+<label class="weekday-choice"><input type="checkbox" value="6">土</label>
+<label class="weekday-choice"><input type="checkbox" value="0">日</label>
+</div>
+</div>
+<div class="field"><label for="repeatFrom">登録開始日</label><input id="repeatFrom" type="date" required></div>
+<div class="field"><label for="repeatTo">登録終了日</label><input id="repeatTo" type="date" required></div>
+</div>
+<div class="modalactions"><span></span><div class="right"><button type="button" class="btn" id="repeatCancel">キャンセル</button><button type="submit" class="btn primary">一括登録</button></div></div>
 </form></div></div>
 <div class="modalback" id="modalback"><div class="modal"><h2 id="modalTitle">予定を登録</h2><form id="entryForm"><div class="formgrid">
-  <div class="field full"><label for="historySelect">履歴・テンプレートから入力（任意）</label><select id="historySelect"><option value="">選択しない</option></select></div>
-  <div class="field full"><label for="title">タイトル</label><input id="title" required maxlength="80" placeholder="例：基本情報の勉強"></div>
-  <div class="field"><label id="dateLabelForEntry" for="date">日付</label><input id="date" type="date" required></div>
-  <div class="timepair" id="timeFields">
-    <div class="field"><label for="start">開始時刻</label><input id="start" type="time" value="09:00"></div>
-    <div class="field"><label for="end">終了時刻</label><input id="end" type="time" value="10:00"></div>
-  </div>
-  <div class="field full" id="deadlineField" style="display:none"><label for="deadlineTime">期限時刻</label><input id="deadlineTime" type="time" value="12:00"></div>
-  <div class="field" id="priorityField"><label for="priority">優先度</label><select id="priority"><option value=""></option><option>低</option><option selected>中</option><option>高</option></select></div>
-  <div class="field"><label for="entryColor">時間割の色</label><input id="entryColor" type="color" value="#dfeaff"></div>
+<div class="field full"><label for="historySelect">履歴・テンプレートから入力（任意）</label><select id="historySelect"><option value="">選択しない</option></select></div>
+<div class="field full"><label for="title">タイトル</label><input id="title" required maxlength="80" placeholder="例：基本情報の勉強"></div>
+<div class="field"><label id="dateLabelForEntry" for="date">日付</label><input id="date" type="date" required></div>
+<div class="timepair" id="timeFields">
+<div class="field"><label for="start">開始時刻</label><input id="start" type="time" value="09:00"></div>
+<div class="field"><label for="end">終了時刻</label><input id="end" type="time" value="10:00"></div>
+</div>
+<div class="field full" id="deadlineField" style="display:none"><label for="deadlineTime">期限時刻</label><input id="deadlineTime" type="time" value="12:00"></div>
+<div class="field" id="priorityField"><label for="priority">優先度</label><select id="priority"><option value=""></option><option>低</option><option selected>中</option><option>高</option></select></div>
+<div class="field"><label for="entryColor">時間割の色</label><input id="entryColor" type="color" value="#dfeaff"></div>
 </div><div class="modalactions"><div><button type="button" class="btn" id="deleteBtn" style="display:none">削除</button><button type="button" class="btn" id="saveTemplateBtn">テンプレート保存</button></div><div class="right"><button type="button" class="btn" id="cancel">キャンセル</button><button type="submit" class="btn primary">保存</button></div></div></form></div></div>
 <div class="modalback" id="colorBack"><div class="modal" style="max-height:88vh;overflow:auto"><h2>設定</h2><h3 style="font-size:14px;margin:0 0 10px">時間割の色</h3><div class="formgrid">
-  <div class="field"><label for="planColor">予定</label><input id="planColor" type="color" value="#dfeaff"></div>
-  <div class="field"><label for="actualColor">実績</label><input id="actualColor" type="color" value="#def4e7"></div>
-  <div class="field"><label for="taskColor">タスク（時間割）</label><input id="taskColor" type="color" value="#fff0dc"></div>
+<div class="field"><label for="planColor">予定</label><input id="planColor" type="color" value="#dfeaff"></div>
+<div class="field"><label for="actualColor">実績</label><input id="actualColor" type="color" value="#def4e7"></div>
+<div class="field"><label for="taskColor">タスク（時間割）</label><input id="taskColor" type="color" value="#fff0dc"></div>
 </div>
 <div style="margin-top:18px"><h3 style="font-size:14px;margin:0 0 10px">タスク一覧の優先度カラー</h3><div class="formgrid">
-  <div class="field"><label for="priorityHighColor">高</label><input id="priorityHighColor" type="color" value="#ffe1e1"></div>
-  <div class="field"><label for="priorityMediumColor">中</label><input id="priorityMediumColor" type="color" value="#fff0dc"></div>
-  <div class="field"><label for="priorityLowColor">低</label><input id="priorityLowColor" type="color" value="#e2f3e8"></div>
+<div class="field"><label for="priorityHighColor">高</label><input id="priorityHighColor" type="color" value="#ffe1e1"></div>
+<div class="field"><label for="priorityMediumColor">中</label><input id="priorityMediumColor" type="color" value="#fff0dc"></div>
+<div class="field"><label for="priorityLowColor">低</label><input id="priorityLowColor" type="color" value="#e2f3e8"></div>
 </div></div><div style="margin-top:22px"><h3 style="font-size:14px;margin:0 0 10px">テンプレート管理</h3><p style="font-size:12px;color:#778197;margin:0 0 10px">保存したテンプレートの名前や時間を編集したり、不要なものを削除できるよ。</p><div id="templateSettingsList"></div></div><div style="margin-top:22px;padding:14px;border:1px solid #dce3ee;border-radius:12px"><h3 style="font-size:14px;margin:0 0 8px">データのバックアップ</h3><p style="font-size:12px;color:#778197;margin:0 0 12px">登録した予定・実績・タスク・テンプレート・色設定をファイルに保存できます。機種変更や同期設定の前にバックアップしてね。</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" id="exportDataBtn">バックアップを保存</button><button type="button" class="btn" id="importDataBtn">バックアップを読み込む</button><input type="file" id="importDataFile" accept=".json,application/json" style="display:none"></div></div><div class="modalactions"><button type="button" class="btn" id="resetColors">色を初期設定に戻す</button><div class="right"><button type="button" class="btn" id="cancelColors">キャンセル</button><button type="button" class="btn primary" id="saveColors">設定を保存</button></div></div></div></div>
 <script>
 const $=id=>document.getElementById(id);
@@ -130,31 +146,31 @@ function typeName(t){return {plan:'予定',actual:'実績',task:'タスク'}[t]|
 function entriesFor(date,type){return entries.filter(e=>e.date===date&&(!type||e.type===type))}
 function setDateLabel(){let end=new Date(selected);end.setDate(end.getDate()+6);$('dateLabel').textContent=view==='day'?`${selected.getFullYear()}年${fmtDate(selected)}`:`${fmtDate(selected)}〜${fmtDate(end)}`}
 function render(){
- setDateLabel();$('dayView').style.display=view==='day'?'block':'none';$('weekView').style.display=view==='week'?'grid':'none';$('timelineTitle').textContent=view==='day'?'時間割｜予定と実績':'1週間の一覧';
- document.querySelectorAll('.switch button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
- const d=toISO(selected);$('plannedStat').textContent=entriesFor(d,'plan').length+'件';
- $('actualStat').textContent=entriesFor(d,'actual').reduce((s,e)=>s+duration(e),0)+'分';
- const ts=entriesFor(d,'task');$('taskStat').textContent=ts.filter(t=>t.done).length+' / '+ts.length;
- renderDay();renderWeek();renderTasks();
+setDateLabel();$('dayView').style.display=view==='day'?'block':'none';$('weekView').style.display=view==='week'?'grid':'none';$('timelineTitle').textContent=view==='day'?'時間割｜予定と実績':'1週間の一覧';
+document.querySelectorAll('.switch button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+const d=toISO(selected);$('plannedStat').textContent=entriesFor(d,'plan').length+'件';
+$('actualStat').textContent=entriesFor(d,'actual').reduce((s,e)=>s+duration(e),0)+'分';
+const ts=entriesFor(d,'task');$('taskStat').textContent=ts.filter(t=>t.done).length+' / '+ts.length;
+renderDay();renderWeek();renderTasks();
 }
 function renderDay(){
- const d=toISO(selected), plans=entriesFor(d,'plan'), actuals=entriesFor(d,'actual');
- const tasks=entriesFor(d,'task').filter(e=>e.deadlineTime);
- const all=[...plans,...actuals,...tasks];
- const startOf=e=>e.type==='task'?e.deadlineTime:e.start;
- const endOf=e=>e.type==='task'?e.deadlineTime:e.end;
- let min=Math.min(8*60,...all.map(startOf).filter(Boolean).map(mins));
- let max=Math.max(20*60,...all.map(endOf).filter(Boolean).map(mins));
- min=Math.max(0,Math.floor(min/60)*60);max=Math.min(24*60,Math.ceil(max/60)*60);
- const px=40, height=(max-min)/60*px;
- let ruler='';for(let t=min;t<=max;t+=60){ruler+=`<div class="tick" style="top:${(t-min)/60*px}px;height:1px">${pad(Math.floor(t/60))}:00</div>`}
- function cards(list,cls){return list.map(e=>{const start=startOf(e);let top=(mins(start)-min)/60*px,h=Math.max(42,e.type==='task'?42:duration(e)/60*px);return `<div class="event ${cls}" style="top:${top}px;height:${h}px;--entry-color:${entryColor(e)}" data-id="${e.id}" title="クリックして編集"><div class="name">${esc(e.title)}</div><div class="time">${timeText(e)}</div></div>`}).join('')}
- $('dayView').innerHTML=`<div class="dayhead"><div>時刻</div><div>計画｜予定</div><div>記録｜実績</div></div><div class="daysection"><div class="daylabel">${selected.getMonth()+1}月${selected.getDate()}日（${'日月火水木金土'[selected.getDay()]}）</div><div class="track" style="height:${height}px"><div class="ruler" style="height:${height}px">${ruler}</div><div class="lane" style="height:${height}px">${cards(plans,'plan')}${cards(tasks,'task')}</div><div class="lane" style="height:${height}px">${actuals.length?cards(actuals,'actual'):'<div class="empty">実績はまだありません<br>「＋ 実績」から記録できます</div>'}</div></div></div>`;
- $('dayView').querySelectorAll('.event').forEach(el=>el.addEventListener('click',()=>openEntry(el.dataset.id)));
+const d=toISO(selected), plans=entriesFor(d,'plan'), actuals=entriesFor(d,'actual');
+const tasks=entriesFor(d,'task').filter(e=>e.deadlineTime);
+const all=[...plans,...actuals,...tasks];
+const startOf=e=>e.type==='task'?e.deadlineTime:e.start;
+const endOf=e=>e.type==='task'?e.deadlineTime:e.end;
+let min=Math.min(8*60,...all.map(startOf).filter(Boolean).map(mins));
+let max=Math.max(20*60,...all.map(endOf).filter(Boolean).map(mins));
+min=Math.max(0,Math.floor(min/60)*60);max=Math.min(24*60,Math.ceil(max/60)*60);
+const px=40, height=(max-min)/60*px;
+let ruler='';for(let t=min;t<=max;t+=60){ruler+=`<div class="tick" style="top:${(t-min)/60*px}px;height:1px">${pad(Math.floor(t/60))}:00</div>`}
+function cards(list,cls){return list.map(e=>{const start=startOf(e);let top=(mins(start)-min)/60*px,h=Math.max(42,e.type==='task'?42:duration(e)/60*px);return `<div class="event ${cls}" style="top:${top}px;height:${h}px;--entry-color:${entryColor(e)}" data-id="${e.id}" title="クリックして編集"><div class="name">${esc(e.title)}</div><div class="time">${timeText(e)}</div></div>`}).join('')}
+$('dayView').innerHTML=`<div class="dayhead"><div>時刻</div><div>計画｜予定</div><div>記録｜実績</div></div><div class="daysection"><div class="daylabel">${selected.getMonth()+1}月${selected.getDate()}日（${'日月火水木金土'[selected.getDay()]}）</div><div class="track" style="height:${height}px"><div class="ruler" style="height:${height}px">${ruler}</div><div class="lane" style="height:${height}px">${cards(plans,'plan')}${cards(tasks,'task')}</div><div class="lane" style="height:${height}px">${actuals.length?cards(actuals,'actual'):'<div class="empty">実績はまだありません<br>「＋ 実績」から記録できます</div>'}</div></div></div>`;
+$('dayView').querySelectorAll('.event').forEach(el=>el.addEventListener('click',()=>openEntry(el.dataset.id)));
 }
 function renderWeek(){
- let out='';for(let i=0;i<7;i++){let d=new Date(selected);d.setDate(d.getDate()+i);let iso=toISO(d);let list=entries.filter(e=>e.date===iso).sort((a,b)=>(a.type==='task'?(a.deadlineTime||''): (a.start||'')).localeCompare(b.type==='task'?(b.deadlineTime||''):(b.start||'')));out+=`<div class="weekday"><div class="wd">${'日月火水木金土'[d.getDay()]}曜 · ${fmtDate(d)}</div>${list.length?list.map(e=>`<div class="mini-event ${e.type}" style="--entry-color:${entryColor(e)}" data-id="${e.id}"><b>${typeName(e.type)}</b><br>${esc(e.title)}<br>${timeText(e)}</div>`).join(''):'<small style="color:#a0a8b8">予定なし</small>'}</div>`}
- $('weekView').innerHTML=out;$('weekView').querySelectorAll('[data-id]').forEach(el=>el.addEventListener('click',()=>openEntry(el.dataset.id)));
+let out='';for(let i=0;i<7;i++){let d=new Date(selected);d.setDate(d.getDate()+i);let iso=toISO(d);let list=entries.filter(e=>e.date===iso).sort((a,b)=>(a.type==='task'?(a.deadlineTime||''): (a.start||'')).localeCompare(b.type==='task'?(b.deadlineTime||''):(b.start||'')));out+=`<div class="weekday"><div class="wd">${'日月火水木金土'[d.getDay()]}曜 · ${fmtDate(d)}</div>${list.length?list.map(e=>`<div class="mini-event ${e.type}" style="--entry-color:${entryColor(e)}" data-id="${e.id}"><b>${typeName(e.type)}</b><br>${esc(e.title)}<br>${timeText(e)}</div>`).join(''):'<small style="color:#a0a8b8">予定なし</small>'}</div>`}
+$('weekView').innerHTML=out;$('weekView').querySelectorAll('[data-id]').forEach(el=>el.addEventListener('click',()=>openEntry(el.dataset.id)));
 }
 function renderTasks(){let list=entries.filter(e=>e.type==='task').sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.deadlineTime||'').localeCompare(b.deadlineTime||''));$('tasks').innerHTML=list.length?list.map(e=>{const cls=e.priority==='高'?'priority-high':e.priority==='低'?'priority-low':'priority-medium';return `<label class="taskitem ${cls}"><input type="checkbox" data-task="${e.id}" ${e.done?'checked':''}><span><strong style="${e.done?'text-decoration:line-through;color:#929bad':''}">${esc(e.title)}</strong><small>${e.date||'期限日なし'} · 期限 ${e.deadlineTime||'時刻未設定'} · 優先度 ${e.priority||'中'}</small></span></label>`}).join(''):'<div style="color:#8993a6;font-size:12px">タスクはまだありません。</div>';$('tasks').querySelectorAll('[data-task]').forEach(el=>el.addEventListener('change',()=>{let e=entries.find(x=>x.id===el.dataset.task);if(e){e.done=el.checked;save();render()}}))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -173,7 +189,6 @@ function openRepeat(){const today=toISO(selected);$('repeatTitle').value='';$('r
 $('addPlanBtn').onclick=()=> $('scheduleChoiceBack').classList.add('show');$('singleScheduleChoice').onclick=()=>{$('scheduleChoiceBack').classList.remove('show');openEntry(null,'plan')};$('repeatScheduleChoice').onclick=()=>{$('scheduleChoiceBack').classList.remove('show');openRepeat()};$('scheduleChoiceCancel').onclick=()=>$('scheduleChoiceBack').classList.remove('show');$('scheduleChoiceBack').addEventListener('click',e=>{if(e.target===$('scheduleChoiceBack'))$('scheduleChoiceBack').classList.remove('show')});$('repeatCancel').onclick=()=>$('repeatBack').classList.remove('show');
 $('repeatBack').addEventListener('click',e=>{if(e.target===$('repeatBack'))$('repeatBack').classList.remove('show')});
 $('repeatForm').addEventListener('submit',ev=>{ev.preventDefault();const title=$('repeatTitle').value.trim(),start=$('repeatStart').value,end=$('repeatEnd').value,from=$('repeatFrom').value,to=$('repeatTo').value,type='plan';const days=[...document.querySelectorAll('#weekdayChoices input:checked')].map(x=>Number(x.value));if(!days.length){alert('繰り返す曜日を1つ以上選んでね。');return}if(!from||!to||to<from){alert('登録期間を確認してね。');return}if(mins(end)<=mins(start)){alert('終了時刻は開始時刻より後に設定してね。');return}let d=new Date(from+'T12:00:00'),last=new Date(to+'T12:00:00'),count=0;while(d<=last){if(days.includes(d.getDay())){entries.push({id:crypto.randomUUID(),title,type,date:toISO(d),start,end,priority:'中',color:$('repeatColor').value,done:false});count++}d.setDate(d.getDate()+1)}if(!count){alert('選択した期間内に該当する曜日がありません。');return}selected=new Date(from+'T00:00:00');save();$('repeatBack').classList.remove('show');render();alert(`${count}件の予定を一括登録したよ！`)});
-
 document.querySelectorAll('.switch button').forEach(b=>b.onclick=()=>{view=b.dataset.view;render()});
 $('prev').onclick=()=>{selected.setDate(selected.getDate()-(view==='day'?1:7));render()};$('next').onclick=()=>{selected.setDate(selected.getDate()+(view==='day'?1:7));render()};$('today').onclick=()=>{selected=new Date();selected.setHours(0,0,0,0);render()};
 let colorSettingsBackup=null, prioritySettingsBackup=null, templateSettingsOriginal=null;
@@ -182,7 +197,6 @@ function previewSettingsColors(){paintSettingsColorInputs()}
 function renderTemplateSettings(){const root=$('templateSettingsList');if(!templates.length){root.innerHTML='<p style="font-size:12px;color:#8993a6">テンプレートはまだありません。新規登録画面の「テンプレート保存」から追加できるよ。</p>';return}root.innerHTML=templates.map(t=>`<div class="template-row" data-template="${t.id}"><input class="template-name" data-field="title" aria-label="テンプレート名" value="${esc(t.title)}" maxlength="80"><div><label style="display:block;font-size:10px;color:#778197;margin-bottom:4px">開始時刻</label><input data-field="start" type="time" value="${t.start||''}"></div><div><label style="display:block;font-size:10px;color:#778197;margin-bottom:4px">終了時刻</label><input data-field="end" type="time" value="${t.end||''}"></div><div><label style="display:block;font-size:10px;color:#778197;margin-bottom:4px">優先度</label><select data-field="priority"><option value="" ${!t.priority?'selected':''}></option><option ${t.priority==='低'?'selected':''}>低</option><option ${t.priority==='中'?'selected':''}>中</option><option ${t.priority==='高'?'selected':''}>高</option></select></div><div><label style="display:block;font-size:10px;color:#778197;margin-bottom:4px">色</label><input data-field="color" type="color" value="${t.color||timelineColors[t.type]||'#dfeaff'}"></div><div class="template-actions"><button type="button" class="btn" data-action="save">変更を保存</button><button type="button" class="btn" data-action="delete">削除</button></div></div>`).join('');root.querySelectorAll('.template-row').forEach(row=>{row.querySelector('[data-action="save"]').onclick=()=>{const t=templates.find(x=>x.id===row.dataset.template);if(!t)return;const title=row.querySelector('[data-field="title"]').value.trim();if(!title){alert('テンプレート名を入力してね。');return}t.title=title;t.start=row.querySelector('[data-field="start"]').value;t.end=row.querySelector('[data-field="end"]').value;t.priority=row.querySelector('[data-field="priority"]').value;t.color=row.querySelector('[data-field="color"]').value;localStorage.setItem('jibun-time-templates',JSON.stringify(templates));populateHistory();renderTemplateSettings();alert('テンプレートを更新したよ！')};row.querySelector('[data-action="delete"]').onclick=()=>{const t=templates.find(x=>x.id===row.dataset.template);if(t&&confirm(`「${t.title}」を削除する？`)){templates=templates.filter(x=>x.id!==t.id);localStorage.setItem('jibun-time-templates',JSON.stringify(templates));populateHistory();renderTemplateSettings()}}})}
 $('colorSettingsBtn').onclick=()=>{colorSettingsBackup={...timelineColors};prioritySettingsBackup={...priorityColors};templateSettingsOriginal=JSON.stringify(templates);$('planColor').value=timelineColors.plan;$('actualColor').value=timelineColors.actual;$('taskColor').value=timelineColors.task;$('priorityHighColor').value=priorityColors['高'];$('priorityMediumColor').value=priorityColors['中'];$('priorityLowColor').value=priorityColors['低'];paintSettingsColorInputs();renderTemplateSettings();$('colorBack').classList.add('show')};
 ['planColor','actualColor','taskColor','priorityHighColor','priorityMediumColor','priorityLowColor'].forEach(id=>$(id).addEventListener('input',previewSettingsColors));
-
 function cancelColorSettings(){if(colorSettingsBackup){timelineColors={...colorSettingsBackup};applyColors();render()}if(prioritySettingsBackup){priorityColors={...prioritySettingsBackup};applyColors();render()}if(templateSettingsOriginal!==null){templates=JSON.parse(templateSettingsOriginal);localStorage.setItem('jibun-time-templates',JSON.stringify(templates));populateHistory()}$('colorBack').classList.remove('show');colorSettingsBackup=null;prioritySettingsBackup=null;templateSettingsOriginal=null}
 $('cancelColors').onclick=cancelColorSettings;$('colorBack').addEventListener('click',e=>{if(e.target===$('colorBack'))cancelColorSettings()});
 $('saveColors').onclick=()=>{const old={...colorSettingsBackup};timelineColors={plan:$('planColor').value,actual:$('actualColor').value,task:$('taskColor').value};priorityColors={'高':$('priorityHighColor').value,'中':$('priorityMediumColor').value,'低':$('priorityLowColor').value};entries=entries.map(e=>({...e,color:e.color===old[e.type]?timelineColors[e.type]:(e.color||timelineColors[e.type])}));localStorage.setItem('jibun-time-colors',JSON.stringify(timelineColors));localStorage.setItem('jibun-time-priority-colors',JSON.stringify(priorityColors));applyColors();save();localStorage.setItem('jibun-time-templates',JSON.stringify(templates));$('colorBack').classList.remove('show');colorSettingsBackup=null;prioritySettingsBackup=null;templateSettingsOriginal=null;render()};
@@ -193,5 +207,205 @@ $('importDataBtn').onclick=()=>$('importDataFile').click();
 $('importDataFile').onchange=async ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.app!=='jibun-jikan'||!data.storage||!data.storage['jibun-time-entries'])throw new Error('invalid');if(!confirm('今このブラウザに保存されているアプリのデータを、バックアップの内容で置き換えるよ。先に現在のデータもバックアップした？'))return;Object.entries(data.storage).forEach(([k,v])=>{if(['jibun-time-entries','jibun-time-templates','jibun-time-colors','jibun-time-priority-colors'].includes(k)){if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}});alert('バックアップを読み込んだよ。画面を再読み込みするね。');location.reload()}catch(e){alert('バックアップファイルを読み込めなかったよ。じぶん時間から保存したJSONファイルを選んでね。')}finally{ev.target.value=''}};
 render();
 </script>
+
+<div id="cloudLoginBack">
+  <section id="cloudLoginCard" aria-labelledby="cloudLoginTitle">
+    <h2 id="cloudLoginTitle">じぶん時間にログイン</h2>
+    <p>MacとiPhoneで同じデータを使うため、Supabaseにログインします。最初は、今まで使っていたMacのブラウザからログインしてね。</p>
+    <div class="cloudfield"><label for="cloudUrl">Supabase Project URL</label><input id="cloudUrl" type="url" placeholder="https://xxxxxxxx.supabase.co" autocomplete="url" required></div>
+    <div class="cloudfield"><label for="cloudKey">Publishable key</label><input id="cloudKey" type="password" placeholder="sb_publishable_..." autocomplete="off" required></div>
+    <div class="cloudfield"><label for="cloudEmail">メールアドレス</label><input id="cloudEmail" type="email" autocomplete="username" required></div>
+    <div class="cloudfield"><label for="cloudPassword">パスワード</label><input id="cloudPassword" type="password" autocomplete="current-password" required></div>
+    <div class="cloudactions"><button type="button" class="btn primary" id="cloudLoginBtn">ログインして同期</button><button type="button" class="btn" id="cloudLogoutBtn">ログアウト</button></div>
+    <div id="cloudMessage" role="status"></div>
+    <p style="font-size:11px;margin-bottom:0">URLとPublishable keyはこのブラウザに保存します。パスワードはアプリのコードには保存しません。Secret keyは絶対に入力しないでね。</p>
+  </section>
+</div>
+<p id="cloudStatus" style="display:none"></p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+  const keys = ['jibun-time-entries','jibun-time-templates','jibun-time-colors','jibun-time-priority-colors'];
+  const $c = id => document.getElementById(id);
+  const nativeSetItem = Storage.prototype.setItem;
+  const nativeRemoveItem = Storage.prototype.removeItem;
+  let client = null, currentUser = null, localDirty = false, ready = false, saveTimer = null, applyingRemote = false;
+  const configUrlKey = 'jibun-time-supabase-url';
+  const configPublishableKey = 'jibun-time-supabase-publishable-key';
+  const lastSyncKey = 'jibun-time-last-cloud-sync';
+  $c('cloudUrl').value = localStorage.getItem(configUrlKey) || '';
+  $c('cloudKey').value = localStorage.getItem(configPublishableKey) || '';
+
+  function message(text, isError=true) {
+    $c('cloudMessage').style.color = isError ? '#9b3d35' : '#247449';
+    $c('cloudMessage').textContent = text;
+  }
+  function status(text) {
+    $c('cloudStatus').style.display = 'block';
+    $c('cloudStatus').textContent = text;
+  }
+  function showLogin(show) {
+    $c('cloudLoginBack').hidden = !show;
+    $c('cloudLogoutBtn').style.display = currentUser ? 'inline-block' : 'none';
+  }
+  function readStorage() {
+    const storage = {};
+    keys.forEach(k => storage[k] = localStorage.getItem(k));
+    return {app:'jibun-jikan',version:1,storage,syncedAt:new Date().toISOString()};
+  }
+  function applyStorage(data) {
+    if (!data || data.app !== 'jibun-jikan' || !data.storage) throw new Error('クラウドのデータ形式を確認できませんでした。');
+    applyingRemote = true;
+    try {
+      keys.forEach(k => {
+        const v = data.storage[k];
+        if (v === null || typeof v === 'undefined') nativeRemoveItem.call(localStorage, k);
+        else nativeSetItem.call(localStorage, k, v);
+      });
+      nativeSetItem.call(localStorage, lastSyncKey, data.syncedAt || new Date().toISOString());
+    } finally {
+      applyingRemote = false;
+    }
+  }
+  async function getCloudRow() {
+    const {data,error} = await client.from('user_data').select('user_id,data').eq('user_id', currentUser.id).maybeSingle();
+    if (error) throw error;
+    return data;
+  }
+  async function writeCloud() {
+    if (!client || !currentUser) return;
+    const payload = readStorage();
+    const existing = await getCloudRow();
+    let result;
+    if (existing) result = await client.from('user_data').update({data:payload}).eq('user_id', currentUser.id);
+    else result = await client.from('user_data').insert({user_id:currentUser.id,data:payload});
+    if (result.error) throw result.error;
+    nativeSetItem.call(localStorage, lastSyncKey, payload.syncedAt);
+    localDirty = false;
+    status('クラウドに同期済み ✓ ' + new Date(payload.syncedAt).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}));
+  }
+  async function pullIfNewer() {
+    if (!client || !currentUser) return;
+    if (localDirty) { await writeCloud(); return; }
+    const row = await getCloudRow();
+    if (!row) { await writeCloud(); return; }
+    const remoteAt = row.data && row.data.syncedAt ? Date.parse(row.data.syncedAt) : 0;
+    const localAt = Date.parse(localStorage.getItem(lastSyncKey) || '') || 0;
+    if (remoteAt > localAt) {
+      applyStorage(row.data);
+      status('別の端末の最新データを読み込みました。再読み込みします…');
+      location.reload();
+      return;
+    }
+    status('クラウドに同期済み ✓');
+  }
+  function scheduleSave() {
+    if (!ready || applyingRemote || !currentUser) return;
+    localDirty = true;
+    status('変更をクラウドに保存中…');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      try { await writeCloud(); }
+      catch (e) { status('同期できませんでした。通信とSupabase設定を確認してね。'); message('同期エラー: ' + (e.message || String(e))); }
+    }, 900);
+  }
+  function startSync() {
+    if (ready) return;
+    ready = true;
+    const original = Storage.prototype.setItem;
+    Storage.prototype.setItem = function(key,value) {
+      original.call(this,key,value);
+      if (this === localStorage && keys.includes(key)) scheduleSave();
+    };
+    window.addEventListener('focus', () => pullIfNewer().catch(e => message('同期エラー: ' + (e.message || String(e)))));
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') pullIfNewer().catch(e => message('同期エラー: ' + (e.message || String(e))));
+    });
+    showLogin(false);
+    $c('cloudLogoutBtn').style.display = 'inline-block';
+    status('クラウド同期を準備しています…');
+    pullIfNewer().catch(e => { status('同期できませんでした'); message('同期エラー: ' + (e.message || String(e))); });
+  }
+  function makeClient(url,key) {
+    if (!window.supabase || !window.supabase.createClient) throw new Error('Supabaseライブラリを読み込めませんでした。ネットワーク接続を確認してね。');
+    if (!url.startsWith('https://') || !key) throw new Error('Supabase Project URLとPublishable keyを確認してね。');
+    return window.supabase.createClient(url,key);
+  }
+  async function afterLogin(user, firstLogin=false) {
+    currentUser = user;
+    const row = await getCloudRow();
+    if (row && row.data && row.data.storage) {
+      if (firstLogin) {
+        const useCloud = confirm('Supabaseに保存済みのデータがあります。\n\nOK：クラウドのデータをこのMacに読み込む\nキャンセル：このMacのデータをクラウドに保存する\n\n※選んだ側のデータで上書きされます。');
+        if (useCloud) {
+          applyStorage(row.data);
+          location.reload();
+          return;
+        }
+        await writeCloud();
+      }
+    } else {
+      await writeCloud();
+    }
+    startSync();
+  }
+  async function prepareClient() {
+    const url = $c('cloudUrl').value.trim();
+    const key = $c('cloudKey').value.trim();
+    if (!url || !key) throw new Error('Supabase Project URLとPublishable keyを入力してね。');
+    nativeSetItem.call(localStorage, configUrlKey, url);
+    nativeSetItem.call(localStorage, configPublishableKey, key);
+    client = makeClient(url,key);
+  }
+  $c('cloudLoginBtn').addEventListener('click', async () => {
+    $c('cloudLoginBtn').disabled = true;
+    message('ログインしています…', false);
+    try {
+      await prepareClient();
+      const email = $c('cloudEmail').value.trim();
+      const password = $c('cloudPassword').value;
+      if (!email || !password) throw new Error('メールアドレスとパスワードを入力してね。');
+      const {data,error} = await client.auth.signInWithPassword({email,password});
+      if (error) throw error;
+      currentUser = data.user;
+      await afterLogin(data.user, true);
+      $c('cloudPassword').value = '';
+      message('ログインできました。', false);
+    } catch(e) {
+      message('ログインできませんでした: ' + (e.message || String(e)) + '\nURL・Publishable key・メールアドレス・パスワードを確認してね。');
+    } finally { $c('cloudLoginBtn').disabled = false; }
+  });
+  $c('cloudLogoutBtn').addEventListener('click', async () => {
+    try {
+      if (client) await client.auth.signOut();
+      currentUser = null; ready = false; localDirty = false;
+      showLogin(true);
+      status('ログアウトしました。端末内のデータは削除していません。');
+      message('ログアウトしました。端末内のデータは残っています。', false);
+    } catch(e) { message('ログアウトできませんでした: ' + (e.message || String(e))); }
+  });
+
+  (async () => {
+    const url = localStorage.getItem(configUrlKey);
+    const key = localStorage.getItem(configPublishableKey);
+    if (!url || !key) { showLogin(true); return; }
+    try {
+      client = makeClient(url,key);
+      const {data,error} = await client.auth.getSession();
+      if (error) throw error;
+      if (data.session && data.session.user) {
+        currentUser = data.session.user;
+        showLogin(false);
+        await afterLogin(data.session.user, false);
+      } else showLogin(true);
+    } catch(e) {
+      showLogin(true);
+      message('同期の準備ができませんでした: ' + (e.message || String(e)) + '\n設定を確認して、もう一度ログインしてね。');
+    }
+  })();
+})();
+</script>
+
 </body>
 </html>
+mahu@sakuramotomahonoMacBook-Air ~ % 
