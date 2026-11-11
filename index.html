@@ -17,7 +17,7 @@
 .panel{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}.panelhead{padding:18px 18px 14px;display:flex;justify-content:space-between;align-items:end;gap:10px}.panelhead h2{margin:0;font-size:17px}.panelhead p{margin:5px 0 0;color:var(--muted);font-size:12px}
 .timeline{padding:0 14px 20px;overflow-x:auto}.dayhead{display:grid;grid-template-columns:54px minmax(220px,1fr) minmax(220px,1fr);gap:10px;min-width:560px;margin-bottom:8px}.dayhead div{padding:9px 12px;background:#f7f8fb;border-radius:9px;color:var(--muted);font-size:12px;font-weight:700}.dayhead div:nth-child(2){color:var(--blue-ink);background:#f0f5ff}.dayhead div:nth-child(3){color:var(--green-ink);background:#effaf3}
 .daysection{margin-bottom:20px;min-width:560px}.daylabel{font-size:13px;font-weight:750;margin:10px 0 8px;padding:0 3px}.track{display:grid;grid-template-columns:54px minmax(220px,1fr) minmax(220px,1fr);gap:10px;position:relative}
-.ruler{position:relative;color:var(--muted);font-size:11px}.tick{position:absolute;left:0;right:0;border-top:1px solid #edf0f5;padding-top:3px}.lane{position:relative;border-left:1px solid #e9edf4;background:repeating-linear-gradient(to bottom,transparent 0,transparent 39px,#edf0f5 40px);border-radius:5px}
+.ruler{position:relative;color:var(--muted);font-size:11px}.tick{position:absolute;left:0;right:0;border-top:1px solid #edf0f5;padding-top:3px}.lane{position:relative;min-width:0;overflow:hidden;border-left:1px solid #e9edf4;background:repeating-linear-gradient(to bottom,transparent 0,transparent 39px,#edf0f5 40px);border-radius:5px}
 .event{position:absolute;left:5px;right:5px;min-height:42px;border-radius:10px;padding:8px 9px;overflow:hidden;border:1px solid transparent;cursor:pointer;box-shadow:0 2px 5px #27395c08}.event.plan{background:var(--entry-color,var(--plan-color,var(--blue)));color:#243047;border-color:color-mix(in srgb,var(--plan-color,var(--blue)) 75%,#243047)}.event.actual{background:var(--entry-color,var(--actual-color,var(--green)));color:#243047;border-color:color-mix(in srgb,var(--actual-color,var(--green)) 75%,#243047)}.event.task{background:var(--entry-color,var(--task-color,var(--orange)));color:#243047;border-color:color-mix(in srgb,var(--task-color,var(--orange)) 75%,#243047)}
 .event .kind{font-size:10px;font-weight:800;opacity:.85;margin-bottom:3px}.event .name{font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.event .time{font-size:10px;margin-top:4px;opacity:.9}.empty{position:absolute;top:12px;left:10px;right:10px;color:#a0a8b8;font-size:11px;line-height:1.7}
 .weeklist{display:grid;grid-template-columns:repeat(7,minmax(130px,1fr));gap:8px;overflow-x:auto;padding:0 14px 18px}.weekday{background:#fafbfe;border:1px solid var(--line);border-radius:12px;padding:10px;min-height:170px}.weekday .wd{font-size:11px;color:var(--muted);margin-bottom:9px}.mini-event{border-radius:8px;padding:8px;margin:6px 0;font-size:11px;line-height:1.45;overflow-wrap:anywhere}.mini-event.plan{background:var(--entry-color,var(--plan-color,var(--blue)));color:#243047}.mini-event.actual{background:var(--entry-color,var(--actual-color,var(--green)));color:#243047}.mini-event.task{background:var(--entry-color,var(--task-color,var(--orange)));color:#243047}
@@ -29,6 +29,21 @@
 .field input[type="color"]::-webkit-color-swatch-wrapper{padding:2px}
 .field input[type="color"]::-webkit-color-swatch{border:1px solid #0002;border-radius:5px}.modalactions{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.modalactions .right{display:flex;gap:8px}
 @media(max-width:600px){.app{padding:16px 10px 30px}.brand h1{font-size:23px}.summary{gap:7px}.stat{padding:11px}.stat strong{font-size:18px}.stat span{font-size:10px}.toolbar{padding:10px}.panelhead{padding:15px}.actions .btn{padding:9px 10px}.timeline{padding-left:8px;padding-right:8px}}
+
+
+/* 改修：日次振り返り・重複カード・短時間カード */
+.reflection-panel{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px}
+.reflection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.reflection-head h2{font-size:16px;margin:0}.reflection-head span,.reflection-hint{font-size:11px;color:var(--muted)}
+#dailyReflection{display:block;width:100%;min-height:110px;resize:vertical;border:1px solid #dfe4ed;border-radius:10px;padding:11px;font:inherit;font-size:13px;line-height:1.7;color:var(--ink)}
+.reflection-hint{margin:7px 2px 0}
+.event{padding:5px 6px;min-width:0}
+.event .name{min-width:0;line-height:1.25}
+.event .time{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;margin-top:3px}
+.event.compact{padding:4px 5px;display:flex;align-items:center;gap:4px}
+.event.compact .name{flex:1;font-size:10px;min-width:0}
+.event.compact .time{flex:0 1 auto;max-width:48%;font-size:9px;margin:0}
+@media(max-width:600px){.dayhead{grid-template-columns:42px minmax(145px,1fr) minmax(145px,1fr);gap:5px;min-width:340px}.daysection{min-width:340px}.track{grid-template-columns:42px minmax(145px,1fr) minmax(145px,1fr);gap:5px}.timeline{padding-left:5px;padding-right:5px}.event{padding:4px}.event .name{font-size:10px}.event .time{font-size:9px}.event.compact .name{font-size:9px}.event.compact .time{font-size:8px}.reflection-panel{padding:14px}}
 
 /* クラウド同期・ログイン */
 #cloudLoginBack{position:fixed;inset:0;background:#17243bbd;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
@@ -57,23 +72,24 @@
 <div class="date-nav"><button class="iconbtn" id="prev">‹</button><strong id="dateLabel"></strong><button class="iconbtn" id="next">›</button><button class="btn" id="today">今日</button></div>
 <div class="switch"><button class="active" data-view="day">1日</button><button data-view="week">1週間</button></div>
 </div>
-<div class="summary">
-<div class="stat"><span>今日の予定</span><strong id="plannedStat">0件</strong></div>
-<div class="stat"><span>今日の実績</span><strong id="actualStat">0分</strong></div>
-<div class="stat"><span>タスク完了</span><strong id="taskStat">0 / 0</strong></div>
-</div>
 <section class="panel">
 <div class="panelhead"><div><h2 id="timelineTitle">今日の時間割</h2><p>左右のカードは、開始時刻と所要時間に合わせて配置されます。</p></div></div>
 <div id="dayView" class="timeline"></div>
 <div id="weekView" class="weeklist" style="display:none"></div>
 </section>
+<section class="reflection-panel">
+  <div class="reflection-head"><h2>今日の振り返り</h2><span id="reflectionDate"></span></div>
+  <textarea id="dailyReflection" rows="5" maxlength="5000" placeholder="今日できたこと、気づいたこと、反省点、明日やりたいことなどを自由に記録できます。"></textarea>
+  <p class="reflection-hint" id="reflectionStatus">入力内容は自動保存されます。</p>
+</section>
 <section class="taskpanel"><div class="taskhead"><h2>タスク一覧</h2><button class="btn" id="addTaskBtn2">＋ 追加</button></div><div id="tasks" class="tasks"></div><p class="hint">データはこのブラウザに保存され、ログインするとクラウドにも同期されます。別の端末でも同じアカウントでログインしてね。</p></section>
 </div>
 <div class="modalback" id="scheduleChoiceBack"><div class="modal"><h2>予定を登録</h2><p style="color:#778197;font-size:13px;margin:-5px 0 16px">登録方法を選んでね。</p><div style="display:grid;gap:10px"><button type="button" class="btn" id="singleScheduleChoice" style="text-align:left;padding:14px">１回だけ登録 <small style="display:block;color:#778197;font-weight:400;margin-top:4px">特定の日の予定を登録</small></button><button type="button" class="btn" id="repeatScheduleChoice" style="text-align:left;padding:14px">繰り返し一括登録 <small style="display:block;color:#778197;font-weight:400;margin-top:4px">曜日と期間を指定してまとめて登録</small></button></div><div class="modalactions"><span></span><div class="right"><button type="button" class="btn" id="scheduleChoiceCancel">キャンセル</button></div></div></div></div>
-<div class="modalback" id="repeatBack"><div class="modal"><h2>繰り返し予定を一括登録</h2>
+<div class="modalback" id="actualChoiceBack"><div class="modal"><h2>実績を登録</h2><p style="color:#778197;font-size:13px;margin:-5px 0 16px">登録方法を選んでね。</p><div style="display:grid;gap:10px"><button type="button" class="btn" id="singleActualChoice" style="text-align:left;padding:14px">１回だけ登録 <small style="display:block;color:#778197;font-weight:400;margin-top:4px">特定の日の実績を記録</small></button><button type="button" class="btn" id="repeatActualChoice" style="text-align:left;padding:14px">繰り返し一括登録 <small style="display:block;color:#778197;font-weight:400;margin-top:4px">曜日と期間を指定してまとめて記録</small></button></div><div class="modalactions"><span></span><div class="right"><button type="button" class="btn" id="actualChoiceCancel">キャンセル</button></div></div></div></div>
+<div class="modalback" id="repeatBack"><div class="modal"><h2 id="repeatHeading">繰り返し予定を一括登録</h2>
 <form id="repeatForm">
 <div class="formgrid">
-<div class="field full"><label for="repeatTitle">予定名</label><input id="repeatTitle" required maxlength="80" placeholder="例：通勤、仕事、睡眠"></div>
+<div class="field full"><label for="repeatTitle" id="repeatTitleLabel">予定・実績名</label><input id="repeatTitle" required maxlength="80" placeholder="例：通勤、仕事、睡眠"></div>
 <div class="field"><label for="repeatStart">開始時刻</label><input id="repeatStart" type="time" value="08:00" required></div>
 <div class="field"><label for="repeatEnd">終了時刻</label><input id="repeatEnd" type="time" value="09:00" required></div>
 <div class="field"><label for="repeatColor">時間割の色</label><input id="repeatColor" type="color" value="#dfeaff"></div>
@@ -91,7 +107,7 @@
 <div class="field"><label for="repeatFrom">登録開始日</label><input id="repeatFrom" type="date" required></div>
 <div class="field"><label for="repeatTo">登録終了日</label><input id="repeatTo" type="date" required></div>
 </div>
-<div class="modalactions"><span></span><div class="right"><button type="button" class="btn" id="repeatCancel">キャンセル</button><button type="submit" class="btn primary">一括登録</button></div></div>
+<div class="modalactions"><span></span><div class="right"><button type="button" class="btn" id="repeatCancel">キャンセル</button><button type="submit" class="btn primary" id="repeatSubmitLabel">一括登録</button></div></div>
 </form></div></div>
 <div class="modalback" id="modalback"><div class="modal"><h2 id="modalTitle">予定を登録</h2><form id="entryForm"><div class="formgrid">
 <div class="field full"><label for="historySelect">履歴・テンプレートから入力（任意）</label><select id="historySelect"><option value="">選択しない</option></select></div>
@@ -114,7 +130,7 @@
 <div class="field"><label for="priorityHighColor">高</label><input id="priorityHighColor" type="color" value="#ffe1e1"></div>
 <div class="field"><label for="priorityMediumColor">中</label><input id="priorityMediumColor" type="color" value="#fff0dc"></div>
 <div class="field"><label for="priorityLowColor">低</label><input id="priorityLowColor" type="color" value="#e2f3e8"></div>
-</div></div><div style="margin-top:22px"><h3 style="font-size:14px;margin:0 0 10px">テンプレート管理</h3><p style="font-size:12px;color:#778197;margin:0 0 10px">保存したテンプレートの名前や時間を編集したり、不要なものを削除できるよ。</p><div id="templateSettingsList"></div></div><div style="margin-top:22px;padding:14px;border:1px solid #dce3ee;border-radius:12px"><h3 style="font-size:14px;margin:0 0 8px">データのバックアップ</h3><p style="font-size:12px;color:#778197;margin:0 0 12px">登録した予定・実績・タスク・テンプレート・色設定をファイルに保存できます。機種変更や同期設定の前にバックアップしてね。</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" id="exportDataBtn">バックアップを保存</button><button type="button" class="btn" id="importDataBtn">バックアップを読み込む</button><input type="file" id="importDataFile" accept=".json,application/json" style="display:none"></div></div><div class="modalactions"><button type="button" class="btn" id="resetColors">色を初期設定に戻す</button><div class="right"><button type="button" class="btn" id="cancelColors">キャンセル</button><button type="button" class="btn primary" id="saveColors">設定を保存</button></div></div></div></div>
+</div></div><div style="margin-top:22px"><h3 style="font-size:14px;margin:0 0 10px">テンプレート管理</h3><p style="font-size:12px;color:#778197;margin:0 0 10px">保存したテンプレートの名前や時間を編集したり、不要なものを削除できるよ。</p><div id="templateSettingsList"></div></div><div style="margin-top:22px;padding:14px;border:1px solid #dce3ee;border-radius:12px"><h3 style="font-size:14px;margin:0 0 8px">データのバックアップ</h3><p style="font-size:12px;color:#778197;margin:0 0 12px">登録した予定・実績・タスク・振り返り・テンプレート・色設定をファイルに保存できます。機種変更や同期設定の前にバックアップしてね。</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" id="exportDataBtn">バックアップを保存</button><button type="button" class="btn" id="importDataBtn">バックアップを読み込む</button><input type="file" id="importDataFile" accept=".json,application/json" style="display:none"></div></div><div class="modalactions"><button type="button" class="btn" id="resetColors">色を初期設定に戻す</button><div class="right"><button type="button" class="btn" id="cancelColors">キャンセル</button><button type="button" class="btn primary" id="saveColors">設定を保存</button></div></div></div></div>
 <script>
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,'0');
@@ -123,6 +139,7 @@ const fmtDate=d=>`${d.getMonth()+1}月${d.getDate()}日`;
 let selected=new Date(); selected.setHours(0,0,0,0);
 let view='day', editingId=null, timer=null, currentType='plan';
 let templates=[];try{templates=JSON.parse(localStorage.getItem('jibun-time-templates')||'[]')}catch(e){templates=[]}
+let reflections={};try{reflections=JSON.parse(localStorage.getItem('jibun-time-reflections')||'{}')}catch(e){reflections={}}
 let timelineColors={plan:'#dfeaff',actual:'#def4e7',task:'#fff0dc'};try{timelineColors={...timelineColors,...JSON.parse(localStorage.getItem('jibun-time-colors')||'{}')}}catch(e){}
 let priorityColors={高:'#ffe1e1',中:'#fff0dc',低:'#e2f3e8'};try{priorityColors={...priorityColors,...JSON.parse(localStorage.getItem('jibun-time-priority-colors')||'{}')}}catch(e){}
 function applyColors(){document.documentElement.style.setProperty('--plan-color',timelineColors.plan);document.documentElement.style.setProperty('--actual-color',timelineColors.actual);document.documentElement.style.setProperty('--task-color',timelineColors.task);document.documentElement.style.setProperty('--priority-high',priorityColors['高']);document.documentElement.style.setProperty('--priority-medium',priorityColors['中']);document.documentElement.style.setProperty('--priority-low',priorityColors['低'])}
@@ -148,10 +165,7 @@ function setDateLabel(){let end=new Date(selected);end.setDate(end.getDate()+6);
 function render(){
 setDateLabel();$('dayView').style.display=view==='day'?'block':'none';$('weekView').style.display=view==='week'?'grid':'none';$('timelineTitle').textContent=view==='day'?'時間割｜予定と実績':'1週間の一覧';
 document.querySelectorAll('.switch button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
-const d=toISO(selected);$('plannedStat').textContent=entriesFor(d,'plan').length+'件';
-$('actualStat').textContent=entriesFor(d,'actual').reduce((s,e)=>s+duration(e),0)+'分';
-const ts=entriesFor(d,'task');$('taskStat').textContent=ts.filter(t=>t.done).length+' / '+ts.length;
-renderDay();renderWeek();renderTasks();
+renderDay();renderWeek();renderTasks();renderReflection();
 }
 function renderDay(){
 const d=toISO(selected), plans=entriesFor(d,'plan'), actuals=entriesFor(d,'actual');
@@ -164,8 +178,30 @@ let max=Math.max(20*60,...all.map(endOf).filter(Boolean).map(mins));
 min=Math.max(0,Math.floor(min/60)*60);max=Math.min(24*60,Math.ceil(max/60)*60);
 const px=40, height=(max-min)/60*px;
 let ruler='';for(let t=min;t<=max;t+=60){ruler+=`<div class="tick" style="top:${(t-min)/60*px}px;height:1px">${pad(Math.floor(t/60))}:00</div>`}
-function cards(list,cls){return list.map(e=>{const start=startOf(e);let top=(mins(start)-min)/60*px,h=Math.max(42,e.type==='task'?42:duration(e)/60*px);return `<div class="event ${cls}" style="top:${top}px;height:${h}px;--entry-color:${entryColor(e)}" data-id="${e.id}" title="クリックして編集"><div class="name">${esc(e.title)}</div><div class="time">${timeText(e)}</div></div>`}).join('')}
-$('dayView').innerHTML=`<div class="dayhead"><div>時刻</div><div>計画｜予定</div><div>記録｜実績</div></div><div class="daysection"><div class="daylabel">${selected.getMonth()+1}月${selected.getDate()}日（${'日月火水木金土'[selected.getDay()]}）</div><div class="track" style="height:${height}px"><div class="ruler" style="height:${height}px">${ruler}</div><div class="lane" style="height:${height}px">${cards(plans,'plan')}${cards(tasks,'task')}</div><div class="lane" style="height:${height}px">${actuals.length?cards(actuals,'actual'):'<div class="empty">実績はまだありません<br>「＋ 実績」から記録できます</div>'}</div></div></div>`;
+function cards(list,cls){
+  const items=list.slice().sort((a,b)=>mins(startOf(a))-mins(startOf(b))).map(e=>{
+    const top=(mins(startOf(e))-min)/60*px;
+    const h=Math.max(42,e.type==='task'?42:duration(e)/60*px);
+    return {e,top,h,visualEnd:top+h,col:0,cols:1};
+  });
+  // 見た目の最小高さも衝突判定に含め、短いカード同士も重ねない
+  items.forEach(item=>{
+    let col=0;
+    while(items.some(other=>other!==item && other.col===col && other._placed && item.top<other.visualEnd+2 && item.visualEnd>other.top-2)) col++;
+    item.col=col;item._placed=true;
+  });
+  items.forEach(item=>{
+    const peers=items.filter(other=>item.top<other.visualEnd+2 && item.visualEnd>other.top-2);
+    item.cols=Math.max(1,...peers.map(other=>other.col+1));
+  });
+  return items.map(item=>{
+    const e=item.e, col=item.col, cols=item.cols, top=item.top, h=item.h;
+    const compact=h<=54, left=(col*100/cols).toFixed(4), width=(100/cols).toFixed(4);
+    const eventClass=e.type==='task'?'task':cls;
+    return `<div class="event ${eventClass}${compact?' compact':''}" style="top:${top}px;height:${h}px;left:calc(${left}% + 3px);width:calc(${width}% - 6px);right:auto;--entry-color:${entryColor(e)}" data-id="${e.id}" title="${esc(e.title)}｜${timeText(e)}"><div class="name">${esc(e.title)}</div><div class="time">${timeText(e)}</div></div>`
+  }).join('')
+}
+$('dayView').innerHTML=`<div class="dayhead"><div>時刻</div><div>計画｜予定</div><div>記録｜実績</div></div><div class="daysection"><div class="daylabel">${selected.getMonth()+1}月${selected.getDate()}日（${'日月火水木金土'[selected.getDay()]}）</div><div class="track" style="height:${height}px"><div class="ruler" style="height:${height}px">${ruler}</div><div class="lane" style="height:${height}px">${cards([...plans,...tasks],'plan')}${plans.length||tasks.length?'':'<div class="empty">予定はまだありません<br>「＋ 予定」から登録できます</div>'}</div><div class="lane" style="height:${height}px">${actuals.length?cards(actuals,'actual'):'<div class="empty">実績はまだありません<br>「＋ 実績」から記録できます</div>'}</div></div></div>`;
 $('dayView').querySelectorAll('.event').forEach(el=>el.addEventListener('click',()=>openEntry(el.dataset.id)));
 }
 function renderWeek(){
@@ -173,6 +209,8 @@ let out='';for(let i=0;i<7;i++){let d=new Date(selected);d.setDate(d.getDate()+i
 $('weekView').innerHTML=out;$('weekView').querySelectorAll('[data-id]').forEach(el=>el.addEventListener('click',()=>openEntry(el.dataset.id)));
 }
 function renderTasks(){let list=entries.filter(e=>e.type==='task').sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.deadlineTime||'').localeCompare(b.deadlineTime||''));$('tasks').innerHTML=list.length?list.map(e=>{const cls=e.priority==='高'?'priority-high':e.priority==='低'?'priority-low':'priority-medium';return `<label class="taskitem ${cls}"><input type="checkbox" data-task="${e.id}" ${e.done?'checked':''}><span><strong style="${e.done?'text-decoration:line-through;color:#929bad':''}">${esc(e.title)}</strong><small>${e.date||'期限日なし'} · 期限 ${e.deadlineTime||'時刻未設定'} · 優先度 ${e.priority||'中'}</small></span></label>`}).join(''):'<div style="color:#8993a6;font-size:12px">タスクはまだありません。</div>';$('tasks').querySelectorAll('[data-task]').forEach(el=>el.addEventListener('change',()=>{let e=entries.find(x=>x.id===el.dataset.task);if(e){e.done=el.checked;save();render()}}))}
+function renderReflection(){const d=toISO(selected);$('reflectionDate').textContent=d;$('dailyReflection').value=reflections[d]||'';$('reflectionStatus').textContent='入力内容は自動保存されます。'}
+$('dailyReflection').addEventListener('input',()=>{const d=toISO(selected);reflections[d]=$('dailyReflection').value;localStorage.setItem('jibun-time-reflections',JSON.stringify(reflections));$('reflectionStatus').textContent='保存しました';});
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function openEntry(id=null,type=null){editingId=id;let e=id?entries.find(x=>x.id===id):null;currentType=e?.type||type||'plan';$('entryForm').reset();$('modalTitle').textContent=e?'内容を編集':`新規登録｜${typeName(currentType)}`;$('title').value=e?.title||'';$('date').value=e?.date||toISO(selected);$('dateLabelForEntry').textContent=currentType==='task'?'期限日':'日付';$('timeFields').style.display=currentType==='task'?'none':'grid';$('deadlineField').style.display=currentType==='task'?'block':'none';$('priorityField').style.display=currentType==='task'?'block':'none';$('start').value=e?.start||'09:00';$('end').value=e?.end||'10:00';$('deadlineTime').value=e?.deadlineTime||e?.end||e?.start||'12:00';$('deadlineTime').required=currentType==='task';$('priority').value=e?.priority??'中';$('entryColor').value=e?.color||timelineColors[currentType]||'#dfeaff';$('deleteBtn').style.display=e?'inline-block':'none';populateHistory();$('historySelect').value='';$('modalback').classList.add('show')}
 function historyTime(e){return e.type==='task'?`期限 ${e.deadlineTime||'時刻未設定'}`:`${e.start||'時刻なし'}〜${e.end||'時刻なし'}`}
@@ -184,11 +222,11 @@ function closeModal(){$('modalback').classList.remove('show');editingId=null}
 $('entryForm').addEventListener('submit',ev=>{ev.preventDefault();const title=$('title').value.trim();if(!title)return;const e={id:editingId||crypto.randomUUID(),title,type:currentType,date:$('date').value,start:currentType==='task'?'':$('start').value,end:currentType==='task'?'':$('end').value,deadlineTime:currentType==='task'?$('deadlineTime').value:'',priority:currentType==='task'?$('priority').value:'',color:$('entryColor').value,done:editingId?(entries.find(x=>x.id===editingId)?.done||false):false};if(currentType!=='task'&&e.start&&e.end&&mins(e.end)<=mins(e.start)){alert('終了時刻は開始時刻より後に設定してね。');return}if(editingId){entries=entries.map(x=>x.id===editingId?e:x)}else entries.push(e);selected=new Date(e.date+'T00:00:00');save();closeModal();render()});
 $('deleteBtn').addEventListener('click',()=>{if(editingId&&confirm('この記録を削除する？')){entries=entries.filter(e=>e.id!==editingId);save();closeModal();render()}});
 $('cancel').onclick=closeModal;$('modalback').addEventListener('click',e=>{if(e.target===$('modalback'))closeModal()});
-$('addActualBtn').onclick=()=>openEntry(null,'actual');$('addTaskBtn').onclick=$('addTaskBtn2').onclick=()=>openEntry(null,'task');
-function openRepeat(){const today=toISO(selected);$('repeatTitle').value='';$('repeatColor').value=timelineColors.plan;$('repeatStart').value=today;let end=new Date(selected);end.setMonth(end.getMonth()+1);$('repeatTo').value=toISO(end);$('repeatStart').value=today;$('repeatStart').min='';$('repeatTo').min=today;$('repeatStart').max='';document.querySelectorAll('#weekdayChoices input').forEach(el=>el.checked=['1','2','3','4','5'].includes(el.value));$('repeatBack').classList.add('show')}
+$('addActualBtn').onclick=()=> $('actualChoiceBack').classList.add('show');$('singleActualChoice').onclick=()=>{$('actualChoiceBack').classList.remove('show');openEntry(null,'actual')};$('repeatActualChoice').onclick=()=>{$('actualChoiceBack').classList.remove('show');openRepeat('actual')};$('actualChoiceCancel').onclick=()=>$('actualChoiceBack').classList.remove('show');$('actualChoiceBack').addEventListener('click',e=>{if(e.target===$('actualChoiceBack'))$('actualChoiceBack').classList.remove('show')});$('addTaskBtn').onclick=$('addTaskBtn2').onclick=()=>openEntry(null,'task');
+let repeatType='plan';function openRepeat(type='plan'){repeatType=type;const today=toISO(selected);$('repeatHeading').textContent=type==='actual'?'繰り返し実績を一括登録':'繰り返し予定を一括登録';$('repeatTitleLabel').textContent=type==='actual'?'実績名':'予定名';$('repeatSubmitLabel').textContent=type==='actual'?'実績を一括登録':'予定を一括登録';$('repeatTitle').value='';$('repeatColor').value=timelineColors[type];$('repeatStart').value='08:00';$('repeatEnd').value='09:00';let end=new Date(selected);end.setMonth(end.getMonth()+1);$('repeatFrom').value=today;$('repeatTo').value=toISO(end);$('repeatFrom').min=today;$('repeatTo').min=today;document.querySelectorAll('#weekdayChoices input').forEach(el=>el.checked=['1','2','3','4','5'].includes(el.value));$('repeatBack').classList.add('show')}
 $('addPlanBtn').onclick=()=> $('scheduleChoiceBack').classList.add('show');$('singleScheduleChoice').onclick=()=>{$('scheduleChoiceBack').classList.remove('show');openEntry(null,'plan')};$('repeatScheduleChoice').onclick=()=>{$('scheduleChoiceBack').classList.remove('show');openRepeat()};$('scheduleChoiceCancel').onclick=()=>$('scheduleChoiceBack').classList.remove('show');$('scheduleChoiceBack').addEventListener('click',e=>{if(e.target===$('scheduleChoiceBack'))$('scheduleChoiceBack').classList.remove('show')});$('repeatCancel').onclick=()=>$('repeatBack').classList.remove('show');
 $('repeatBack').addEventListener('click',e=>{if(e.target===$('repeatBack'))$('repeatBack').classList.remove('show')});
-$('repeatForm').addEventListener('submit',ev=>{ev.preventDefault();const title=$('repeatTitle').value.trim(),start=$('repeatStart').value,end=$('repeatEnd').value,from=$('repeatFrom').value,to=$('repeatTo').value,type='plan';const days=[...document.querySelectorAll('#weekdayChoices input:checked')].map(x=>Number(x.value));if(!days.length){alert('繰り返す曜日を1つ以上選んでね。');return}if(!from||!to||to<from){alert('登録期間を確認してね。');return}if(mins(end)<=mins(start)){alert('終了時刻は開始時刻より後に設定してね。');return}let d=new Date(from+'T12:00:00'),last=new Date(to+'T12:00:00'),count=0;while(d<=last){if(days.includes(d.getDay())){entries.push({id:crypto.randomUUID(),title,type,date:toISO(d),start,end,priority:'中',color:$('repeatColor').value,done:false});count++}d.setDate(d.getDate()+1)}if(!count){alert('選択した期間内に該当する曜日がありません。');return}selected=new Date(from+'T00:00:00');save();$('repeatBack').classList.remove('show');render();alert(`${count}件の予定を一括登録したよ！`)});
+$('repeatForm').addEventListener('submit',ev=>{ev.preventDefault();const title=$('repeatTitle').value.trim(),start=$('repeatStart').value,end=$('repeatEnd').value,from=$('repeatFrom').value,to=$('repeatTo').value,type=repeatType;const days=[...document.querySelectorAll('#weekdayChoices input:checked')].map(x=>Number(x.value));if(!days.length){alert('繰り返す曜日を1つ以上選んでね。');return}if(!from||!to||to<from){alert('登録期間を確認してね。');return}if(mins(end)<=mins(start)){alert('終了時刻は開始時刻より後に設定してね。');return}let d=new Date(from+'T12:00:00'),last=new Date(to+'T12:00:00'),count=0;while(d<=last){if(days.includes(d.getDay())){entries.push({id:crypto.randomUUID(),title,type,date:toISO(d),start,end,priority:'',color:$('repeatColor').value,done:type==='actual'});count++}d.setDate(d.getDate()+1)}if(!count){alert('選択した期間内に該当する曜日がありません。');return}selected=new Date(from+'T00:00:00');save();$('repeatBack').classList.remove('show');render();alert(`${count}件の${type==='actual'?'実績':'予定'}を一括登録したよ！`)});
 document.querySelectorAll('.switch button').forEach(b=>b.onclick=()=>{view=b.dataset.view;render()});
 $('prev').onclick=()=>{selected.setDate(selected.getDate()-(view==='day'?1:7));render()};$('next').onclick=()=>{selected.setDate(selected.getDate()+(view==='day'?1:7));render()};$('today').onclick=()=>{selected=new Date();selected.setHours(0,0,0,0);render()};
 let colorSettingsBackup=null, prioritySettingsBackup=null, templateSettingsOriginal=null;
@@ -201,10 +239,10 @@ function cancelColorSettings(){if(colorSettingsBackup){timelineColors={...colorS
 $('cancelColors').onclick=cancelColorSettings;$('colorBack').addEventListener('click',e=>{if(e.target===$('colorBack'))cancelColorSettings()});
 $('saveColors').onclick=()=>{const old={...colorSettingsBackup};timelineColors={plan:$('planColor').value,actual:$('actualColor').value,task:$('taskColor').value};priorityColors={'高':$('priorityHighColor').value,'中':$('priorityMediumColor').value,'低':$('priorityLowColor').value};entries=entries.map(e=>({...e,color:e.color===old[e.type]?timelineColors[e.type]:(e.color||timelineColors[e.type])}));localStorage.setItem('jibun-time-colors',JSON.stringify(timelineColors));localStorage.setItem('jibun-time-priority-colors',JSON.stringify(priorityColors));applyColors();save();localStorage.setItem('jibun-time-templates',JSON.stringify(templates));$('colorBack').classList.remove('show');colorSettingsBackup=null;prioritySettingsBackup=null;templateSettingsOriginal=null;render()};
 $('resetColors').onclick=()=>{$('planColor').value='#dfeaff';$('actualColor').value='#def4e7';$('taskColor').value='#fff0dc';$('priorityHighColor').value='#ffe1e1';$('priorityMediumColor').value='#fff0dc';$('priorityLowColor').value='#e2f3e8';paintSettingsColorInputs()};
-function collectAppData(){const keys=['jibun-time-entries','jibun-time-templates','jibun-time-colors','jibun-time-priority-colors'];const data={app:'jibun-jikan',version:1,exportedAt:new Date().toISOString(),storage:{}};keys.forEach(k=>{data.storage[k]=localStorage.getItem(k)});return data}
+function collectAppData(){const keys=['jibun-time-entries','jibun-time-templates','jibun-time-colors','jibun-time-priority-colors','jibun-time-reflections'];const data={app:'jibun-jikan',version:1,exportedAt:new Date().toISOString(),storage:{}};keys.forEach(k=>{data.storage[k]=localStorage.getItem(k)});return data}
 $('exportDataBtn').onclick=()=>{const data=collectAppData();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='jibun-jikan-backup-'+toISO(new Date())+'.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);alert('バックアップファイルを保存したよ！ファイルを大切に保管してね。')};
 $('importDataBtn').onclick=()=>$('importDataFile').click();
-$('importDataFile').onchange=async ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.app!=='jibun-jikan'||!data.storage||!data.storage['jibun-time-entries'])throw new Error('invalid');if(!confirm('今このブラウザに保存されているアプリのデータを、バックアップの内容で置き換えるよ。先に現在のデータもバックアップした？'))return;Object.entries(data.storage).forEach(([k,v])=>{if(['jibun-time-entries','jibun-time-templates','jibun-time-colors','jibun-time-priority-colors'].includes(k)){if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}});alert('バックアップを読み込んだよ。画面を再読み込みするね。');location.reload()}catch(e){alert('バックアップファイルを読み込めなかったよ。じぶん時間から保存したJSONファイルを選んでね。')}finally{ev.target.value=''}};
+$('importDataFile').onchange=async ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.app!=='jibun-jikan'||!data.storage||!data.storage['jibun-time-entries'])throw new Error('invalid');if(!confirm('今このブラウザに保存されているアプリのデータを、バックアップの内容で置き換えるよ。先に現在のデータもバックアップした？'))return;Object.entries(data.storage).forEach(([k,v])=>{if(['jibun-time-entries','jibun-time-templates','jibun-time-colors','jibun-time-priority-colors','jibun-time-reflections'].includes(k)){if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}});alert('バックアップを読み込んだよ。画面を再読み込みするね。');location.reload()}catch(e){alert('バックアップファイルを読み込めなかったよ。じぶん時間から保存したJSONファイルを選んでね。')}finally{ev.target.value=''}};
 render();
 </script>
 
@@ -225,7 +263,7 @@ render();
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
-  const keys = ['jibun-time-entries','jibun-time-templates','jibun-time-colors','jibun-time-priority-colors'];
+  const keys = ['jibun-time-entries','jibun-time-templates','jibun-time-colors','jibun-time-priority-colors','jibun-time-reflections'];
   const $c = id => document.getElementById(id);
   const nativeSetItem = Storage.prototype.setItem;
   const nativeRemoveItem = Storage.prototype.removeItem;
@@ -408,4 +446,3 @@ render();
 
 </body>
 </html>
-mahu@sakuramotomahonoMacBook-Air ~ % 
